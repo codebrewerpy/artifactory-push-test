@@ -16,9 +16,9 @@ pipeline {
     stage('Upload to Artifactory') {
       steps {
         script {
-          sh 'pwd'
-          sh 'ls target' // Verify that the artifact is present in the target directory
-          sh './jfrog rt u target/demo-0.0.1-SNAPSHOT.jar test_repo/'
+          docker.image('releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0').inside('-u root -v /var/run/docker.sock:/var/run/docker.sock') {
+            sh 'jfrog rt upload --url http://172.17.0.3:8082/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/demo-0.0.1-SNAPSHOT.jar test_repo/'
+          }
         }
       }
     }
