@@ -16,8 +16,8 @@ pipeline {
     stage('Upload to Artifactory') {
       steps {
         script {
-          sh 'curl -fL https://getcli.jfrog.io | sh'
-          sh './jfrog rt config --url=http://172.17.0.3:8082/artifactory/ --access-token=${ARTIFACTORY_ACCESS_TOKEN}'
+          sh 'pwd'
+          sh 'ls target' // Verify that the artifact is present in the target directory
           sh './jfrog rt u target/demo-0.0.1-SNAPSHOT.jar test_repo/'
         }
       }
