@@ -16,10 +16,9 @@ pipeline {
     stage('Upload to Artifactory') {
       steps {
         script {
-          sh 'docker pull releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0'
-          sh 'docker inspect -f . releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0'
-          sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0 jfrog -v'
-          sh 'docker run --rm releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0 jfrog rt upload --url http://172.17.0.3:8082/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/demo-0.0.1-SNAPSHOT.jar test_repo/'
+          sh 'curl -fL https://getcli.jfrog.io | sh'
+          sh './jfrog rt config --url=http://172.17.0.3:8082/artifactory/ --access-token=${ARTIFACTORY_ACCESS_TOKEN}'
+          sh './jfrog rt u target/demo-0.0.1-SNAPSHOT.jar test_repo/'
         }
       }
     }
